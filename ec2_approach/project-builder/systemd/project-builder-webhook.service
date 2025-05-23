@@ -1,0 +1,38 @@
+[Unit]
+Description=Project Builder Webhook Server
+After=network.target
+
+[Service]
+Type=simple
+User=projectbuilder
+Group=projectbuilder
+WorkingDirectory=/home/projectbuilder
+ExecStart=/usr/bin/python3 /opt/project-builder/webhook-server.py
+Restart=always
+RestartSec=10
+
+# Environment variables
+Environment=PATH=/usr/local/bin:/usr/bin:/bin
+EnvironmentFile=/etc/environment
+
+# Security settings
+NoNewPrivileges=true
+PrivateTmp=true
+ProtectSystem=strict
+ProtectHome=true
+ReadWritePaths=/home/projectbuilder /tmp
+ProtectKernelTunables=true
+ProtectKernelModules=true
+ProtectControlGroups=true
+
+# Resource limits
+LimitNOFILE=65536
+LimitNPROC=4096
+
+# Logging
+StandardOutput=journal
+StandardError=journal
+SyslogIdentifier=project-builder-webhook
+
+[Install]
+WantedBy=multi-user.target
